@@ -7,17 +7,7 @@ SCHOLAR_ID = 'NJR_Z-gAAAAJ'
 BASE_OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
 OUTPUT_FILE = os.path.join(BASE_OUTPUT_DIR, "google_scholar.json")
 
-def should_run():
-    if not os.path.exists(OUTPUT_FILE):
-        return True
-    file_mod_time = os.path.getmtime(OUTPUT_FILE)
-    return (time.time() - file_mod_time) > 86400
-
 def run():
-    if not should_run():
-        print("   [Scholar] Data is less than 24h old. Skipping fetch.")
-        return
-
     print("   [Scholar] Fetching Google Scholar data...")
     try:
         author = scholarly.search_author_id(SCHOLAR_ID)
