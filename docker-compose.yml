@@ -1,0 +1,12 @@
+services:
+  website-python-fetcher:
+    image: python:3.11-slim
+    container_name: website-python-fetcher
+    restart: always
+    volumes:
+      - ./src:/app/src
+      # Mounts specifically to the personal-website data folder
+      - ../../data/personal-website:/app/data
+    working_dir: /app
+    command: >
+      sh -c "pip install scholarly && python -u src/manager.py"
