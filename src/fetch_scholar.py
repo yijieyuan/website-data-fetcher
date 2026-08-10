@@ -3,6 +3,7 @@ import time
 import json
 from scholarly import scholarly
 
+
 SCHOLAR_ID = 'NJR_Z-gAAAAJ'
 BASE_OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
 OUTPUT_FILE = os.path.join(BASE_OUTPUT_DIR, "google_scholar.json")
@@ -36,15 +37,11 @@ def run():
             "last_updated": time.strftime('%Y-%m-%d %H:%M:%S')
         }
         
-        os.makedirs(BASE_OUTPUT_DIR, exist_ok=True)
-        
-        # ATOMIC SAVE BUFFER
-        temp_file = OUTPUT_FILE + ".tmp"
-        with open(temp_file, 'w') as f:
-            json.dump(data, f, indent=4)
-        os.replace(temp_file, OUTPUT_FILE)
-            
-        print(f"   [Scholar] Success. Safely saved to {OUTPUT_FILE}")
+        from utils import archive_and_save
+        changed = archive_and_save(OUTPUT_FILE, data)
+
+        status = "updated" if changed else "unchanged"
+        print(f"   [Scholar] Success ({status}). {data['citations']} citations, h={data['h_index']}")
 
     except Exception as e:
         print(f"   [Scholar] Error: {e}")

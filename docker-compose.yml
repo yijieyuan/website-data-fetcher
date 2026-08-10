@@ -8,5 +8,7 @@ services:
       # Mounts specifically to the personal-website data folder
       - ../../data/personal-website:/app/data
     working_dir: /app
+    env_file:
+      - .env
     command: >
       sh -c "pip install scholarly && python -u src/manager.py"

@@ -1,7 +1,8 @@
 import os
 import time
 import requests
-import fetch_scholar  # This is the script we built to scrape scholar data
+import fetch_scholar
+import fetch_kaggle
 
 # The unique URL from the "Scholar Data Fetcher" monitor you created
 KUMA_URL = "http://192.168.1.17:3001/api/push/sVcSs9gXwS?status=up&msg=OK"
@@ -10,8 +11,9 @@ def main():
     print("=== Scholar Fetcher Manager Started (30m Interval) ===")
     while True:
         try:
-            # 1. Run the scraper
+            # 1. Run the scrapers
             fetch_scholar.run()
+            fetch_kaggle.run()
             
             # 2. SUCCESS: Notify Uptime Kuma
             requests.get(KUMA_URL, timeout=10)

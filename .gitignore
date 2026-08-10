@@ -1,0 +1,13 @@
+# Secrets
+.env
+.env.*
+kaggle.json
+
+# Python
+__pycache__/
+*.pyc
+
+# OS / editor junk
+.vscode/
+Thumbs.db
+.DS_Store
