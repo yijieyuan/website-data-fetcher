@@ -2,3 +2,4 @@ date,version,commit_hash,commit_message,revert_command
 2026-03-26,1.0.0,4d9ba50,Initial commit: Stock data fetcher with atomic save,cd x:/apps/website-data-fetcher && git revert 4d9ba50
 2026-03-26,1.0.1,017bfac,update,cd x:/apps/website-data-fetcher && git revert 017bfac
 2026-08-10 14:34,1.1.0,667256c,Add Kaggle fetcher and archive-aware saving,cd x:/apps/website-data-fetcher && git revert 667256c
+2026-10-01 15:42,1.1.1,5115a13,Follow the new share layout: write to data/public; archive to data/private; pin bibtexparser<2; pin the compose project name,cd x:/fetchers/scholar-kaggle && git revert 5115a13

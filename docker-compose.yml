@@ -8,6 +8,8 @@ services:
     restart: always
     volumes:
       - ./src:/app/src
+      # Pinned package versions, installed by the command below
+      - ./requirements.txt:/app/requirements.txt:ro
       # Current files go to data/public (the website reads them); superseded
       # versions are archived to data/private, which the website cannot see.
       - ../../data/public:/app/data
@@ -17,8 +19,8 @@ services:
     working_dir: /app
     env_file:
       - .env
-    # bibtexparser is pinned below 2: scholarly 1.7.11 imports
-    # bibtexparser.bibdatabase, which 2.x removed. Unpinned, a freshly created
-    # container installs 2.x and crashes on import.
+    # Versions are pinned in requirements.txt (bibtexparser must stay below 2,
+    # see the note there). Do not install by bare package name here: a newly
+    # created container would get whatever is newest that day.
     command: >
-      sh -c "pip install scholarly 'bibtexparser<2' && python -u src/manager.py"
+      sh -c "pip install -r requirements.txt && python -u src/manager.py"
