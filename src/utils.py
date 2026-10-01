@@ -6,6 +6,16 @@ import time
 import requests
 
 
+def _archive_root(base_dir):
+    """Where superseded files are archived.
+
+    $ARCHIVE_DIR when set (the container points it at data/private/archive so
+    old versions stay out of the public data folder); otherwise an archive/
+    folder next to the live file.
+    """
+    return os.environ.get("ARCHIVE_DIR") or os.path.join(base_dir, "archive")
+
+
 def download_avatar(url, dest):
     """Download an image URL to dest. Archive the previous file if the bytes changed.
 
@@ -16,7 +26,7 @@ def download_avatar(url, dest):
     base_dir = os.path.dirname(dest)
     name = os.path.splitext(os.path.basename(dest))[0]      # e.g. "kaggle-avatar"
     ext = os.path.splitext(dest)[1] or ".png"
-    archive_dir = os.path.join(base_dir, "archive", name)
+    archive_dir = os.path.join(_archive_root(base_dir), name)
 
     try:
         resp = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=20)
@@ -64,7 +74,7 @@ def archive_and_save(output_file, new_data):
     """
     base_dir = os.path.dirname(output_file)
     name = os.path.splitext(os.path.basename(output_file))[0]  # e.g. "kaggle"
-    archive_dir = os.path.join(base_dir, "archive", name)
+    archive_dir = os.path.join(_archive_root(base_dir), name)
 
     # Load existing data (minus last_updated) for comparison
     changed = True

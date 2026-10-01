@@ -11,3 +11,6 @@ __pycache__/
 .vscode/
 Thumbs.db
 .DS_Store
+
+# AppleDouble sidecars macOS writes next to files on the SMB share
+._*

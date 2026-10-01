@@ -1,3 +1,6 @@
+# Project name pinned so it does not follow the folder name (fetchers/scholar-kaggle).
+name: website-data-fetcher
+
 services:
   website-python-fetcher:
     image: python:3.11-slim
@@ -5,10 +8,17 @@ services:
     restart: always
     volumes:
       - ./src:/app/src
-      # Mounts specifically to the personal-website data folder
-      - ../../data/personal-website:/app/data
+      # Current files go to data/public (the website reads them); superseded
+      # versions are archived to data/private, which the website cannot see.
+      - ../../data/public:/app/data
+      - ../../data/private/archive:/app/archive
+    environment:
+      - ARCHIVE_DIR=/app/archive
     working_dir: /app
     env_file:
       - .env
+    # bibtexparser is pinned below 2: scholarly 1.7.11 imports
+    # bibtexparser.bibdatabase, which 2.x removed. Unpinned, a freshly created
+    # container installs 2.x and crashes on import.
     command: >
-      sh -c "pip install scholarly && python -u src/manager.py"
+      sh -c "pip install scholarly 'bibtexparser<2' && python -u src/manager.py"
