@@ -82,9 +82,15 @@ def archive_and_save(output_file, new_data):
         try:
             with open(output_file, "r", encoding="utf-8") as f:
                 old_data = json.load(f)
-            # Compare without last_updated / last_active (these always change)
+            # Compare without last_updated / last_active (these always change).
+            # The new data is compared in the form it will have once saved:
+            # JSON turns every dict key into a string, and scholarly keys
+            # cites_per_year by int year, so the raw dict never equals the
+            # file read back ({2022: 1} != {"2022": 1}) and every run looked
+            # like a change.
+            new_saved = json.loads(json.dumps(new_data))
             old_cmp = {k: v for k, v in old_data.items() if k not in ("last_updated", "last_active")}
-            new_cmp = {k: v for k, v in new_data.items() if k not in ("last_updated", "last_active")}
+            new_cmp = {k: v for k, v in new_saved.items() if k not in ("last_updated", "last_active")}
             changed = old_cmp != new_cmp
         except (json.JSONDecodeError, OSError):
             changed = True
